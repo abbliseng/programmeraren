@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
     <script src="https://unpkg.com/petite-vue"></script>
@@ -17,13 +18,9 @@
 
     <meta charset="utf-8" />
     <title>Programmeraren</title>
-
 </head>
 
 <body>
-    <script src="firebase.js"></script>
-    <script src="script.js"></script>
-
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <span class="navbar-brand mb-0 h1" style="margin-left: 1rem;">
@@ -41,27 +38,23 @@
         </div>
     </nav>
 
-    <pre id='data'></pre>
-
     <div class="container-fluid">
         <div class="row no-gutters">
             <div class="col-2">
                 <div class="list-group list-group-flush">
-                    <div v-for="(content, title, index) in chapters">
+                    <div v-for="(content, title) in chapters">
                         <!-- DISPLAYING ALL LVL 1 HEADERS -->
                         <a href="#"
                             class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                            {{ title }}
+                            {{content.order_id}} {{ content.id }}
                         </a>
-                        <div v-for="(content1, title1, index1) in content">
-                            <!-- DISPLAYING ALL LVL 2 HEADERS -->
-                            <a href="#" style="padding-left: 1.5rem;"
+                        <div v-for="(content1, title1) in chapters[title]">
+                            <a href="#" v-if="title1 != 'id' && title1 != 'order_id'" style="padding-left: 1.5rem;"
                                 class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                                 {{ title1 }}
                             </a>
-                            <div v-for="(content2, title2, index2) in content1">
-                                <!-- DISPLAYING ALL LVL 2 HEADERS -->
-                                <a href="#" style="padding-left: 3rem;"
+                            <div v-for="(content2, title2) in content[title1]">
+                                <a href="#" v-if="title2 != 'desc'" style="padding-left: 3rem;"
                                     class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                                     {{ title2 }}
                                 </a>
@@ -90,70 +83,139 @@
             </div>
             <div class="col-10">
                 <div class="container">
-                    <div v-for="(content, title) in chapters">
+                    <!-- <div v-for="(content, title) in chapters">
                         <div class="row">
                             <h1>{{ title }}</h1>
                         </div>
-                        <div v-for="(content1, title1) in content">
-                            <div class="row">
-                                <h2>{{ title1 }}</h2>
-                            </div>
-                            <div v-for="(content2, title2) in content1">
-                                <div class="row">
-                                    <h3>{{ title2 }}</h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- <div class="row">
-                            <h1 id="allmant">Allmänt</h1>
-                        </div>
-                        <div class="row">
-                            <h1 id="cs">C#</h1>
-                        </div>
-                        <div class="row">
-                            <h1 id="cpp">C++</h1>
-                        </div> -->
+                    </div> -->
                 </div>
             </div>
         </div>
-    </div>
 
-    <script type="module">
-        PetiteVue.createApp({
-            name: 'Test',
-            chapters: {
-                '1. Allmänt': {
-                    '1.1. Variables': {
-                        '1.1.1. int': {},
-                        '1.1.2. float': {}
+        <div @vue:mounted="fetchChapters()">
+
+        </div>
+
+        <!-- <h1 class="p-2">My Chapters</h1>
+    <div id="chapters" class="p-2 row m-0"></div> -->
+
+
+
+        <!-- Firebase -->
+        <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+        <script>
+            // variables
+            const firebaseConfig = {
+                apiKey: "AIzaSyBxGWhCtNC0X8Kwpgj685NuUkSYUjk1yjU",
+                authDomain: "abb-programmeraren.firebaseapp.com",
+                databaseURL: "https://abb-programmeraren-default-rtdb.firebaseio.com",
+                projectId: "abb-programmeraren",
+                storageBucket: "abb-programmeraren.appspot.com",
+                messagingSenderId: "273252324191",
+                appId: "1:273252324191:web:85a5fc796716943cd2dcea"
+            };
+            firebase.initializeApp(firebaseConfig);
+            const firestore = firebase.firestore();
+
+            const chaptersDOM = document.getElementById("chapters");
+
+            // utility functions
+            function cleanData(snapshots) {
+                let data = [];
+                snapshots.forEach(function (doc) {
+                    data.push({ id: doc.id, ...doc.data() });
+                });
+                return data;
+            }
+
+            // Firebase functions
+            function fetchChapters() {
+                return firestore
+                    .collection("chapters")
+                    .get()
+                    .then((snapshots) => cleanData(snapshots)).then((chapters) => {
+                        return chapters
+                    });
+            }
+
+        // console.log(fetchChapters());
+        </script>
+        <script>
+            // dom functions
+            function createChapter(chapter) {
+                // const elem = document.createElement("div");
+                // elem.setAttribute("id", chapter.id);
+                // elem.setAttribute("class", "card card-body p-2 col-4 row m-0 flex-row d-flex justify-content-between align-items-center");
+                // let chapterElem;
+
+                // if (chapter.status === "incomplete") {
+                //     chapterElem = document.createElement("p");
+                //     chapterElem.setAttribute("class", "m-0 col-7 p-0");
+                //     chapterElem.innerText = chapter.name;
+                // } else {
+                //     chapterElem = document.createElement("s");
+                //     chapterElem.setAttribute("class", "m-0 col-7 p-0");
+                //     chapterElem.innerText = chapter.name;
+                // }
+                // elem.append(chapterElem);
+
+                // if (chapter.status === "incomplete") {
+                //     const updateBtn = document.createElement("button");
+                //     updateBtn.setAttribute("class", "btn btn-success col-2 text-white mr-1");
+                //     updateBtn.innerHTML =
+                //         '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                //     updateBtn.addEventListener("click", function () {
+                //         return handleStatusUpdate(chapter);
+                //     });
+                //     elem.append(updateBtn);
+                // }
+
+                // const deleteBtn = document.createElement("button");
+                // deleteBtn.setAttribute("class", "btn btn-danger col-2 text-white");
+                // deleteBtn.innerHTML =
+                //     '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>';
+                // deleteBtn.addEventListener("click", function () {
+                //     return handleDelete(chapter.id);
+                // });
+                // elem.append(deleteBtn);
+
+                // chaptersDOM.append(elem);
+            }
+        </script>
+        <!-- Vue -->
+        <script>
+            PetiteVue.createApp({
+                name: 'Test',
+                chaptersTest: {
+                    '1. Allmänt': {
+                        '1.1. Variables': {
+                            '1.1.1. int': {},
+                            '1.1.2. float': {}
+                        },
+                        '1.2. Datatyper': {},
+                        '1.3. If-satser': {},
+                        '1.4. Loopar': {
+                            '1.4.1. While-loopar': {},
+                            '1.4.2. For-loopar': {}
+                        }
                     },
-                    '1.2. Datatyper': {},
-                    '1.3. If-satser': {},
-                    '1.4. Loopar': {
-                        '1.4.1. While-loopar': {},
-                        '1.4.2. For-loopar': {}
-                    }
+                    '2. Hemsida': {}
                 },
-                '2. Hemsida': {}
-            },
-            'iteration_index': 0
-        }).mount()
-    </script>
-
-    <!-- <div v-scope="{A: [1,2,2]}">
-            <h2>A</h2>
-            <div v-for="item in A">
-                <div v-scope="{title: 'my_title'}">
-                    <p>{{ title }}</p>
-                    <span>{{item}}</span>
-                </div>
-            </div>
-        </div> -->
+                chapters: {},
+                // METHODS
+                fetchChapters() {
+                    firestore
+                        .collection("chapters")
+                        .get()
+                        .then((snapshots) => cleanData(snapshots)).then((chapters) => {
+                            this.chapters = chapters
+                            // console.log(this.chapters[0].id) // LEVEL ONE TITLES
+                            // console.log(this.chapters[0]) // CONTENT IN KEYS  
+                        })
+                }
+            }).mount()
+        </script>
 </body>
-
-<style>
-
-</style>
 
 </html>
