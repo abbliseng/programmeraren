@@ -1,119 +1,67 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-// import HelloWorld from '@/components/HelloWorld.vue'
-import Navbar from '@/components/Navbar.vue'
-</script>
-
 <template>
-  <header>
-    <Navbar msg="You did it!" />
-
-    <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div> -->
-  </header>
-
-  <RouterView />
+  <div id="app">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand mb-0 h1" style="margin-left: 1rem;" href="/">
+        <!-- <span class="badge badge-warning">WIP</span> -->
+        <!-- <b-badge>New</b-badge> -->
+        <span class="badge bg-warning">WIP</span>
+        Programmeraren
+      </a>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a id="projects" class="nav-item nav-link" href="/projects">Projekt</a>
+          <a id="course_material" class="nav-item nav-link" href="/course_material">Läromedel</a>
+          <a id="tasks" class="nav-item nav-link disabled" href="/tasks">Uppgifter</a>
+          <a id="account" class="nav-item nav-link disabled" href="/account">Konto</a>
+          <!-- <b-tabs content-class="mt-3">
+            <b-tab title="First" active>
+              <p>I'm the first tab</p>
+            </b-tab>
+            <b-tab title="Second">
+              <p>I'm the second tab</p>
+            </b-tab>
+            <b-tab title="Disabled" disabled>
+              <p>I'm a disabled tab!</p>
+            </b-tab>
+          </b-tabs> -->
+        </div>
+      </div>
+    </nav>
+    <router-view />
+  </div>
 </template>
 
-<!-- <style>
-@import '@/assets/base.css';
+<script>
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';// import * as firebase from 'firebase';
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+const firebaseConfig = {
+    apiKey: "AIzaSyBxGWhCtNC0X8Kwpgj685NuUkSYUjk1yjU",
+    authDomain: "abb-programmeraren.firebaseapp.com",
+    databaseURL: "https://abb-programmeraren-default-rtdb.firebaseio.com",
+    projectId: "abb-programmeraren",
+    storageBucket: "abb-programmeraren.appspot.com",
+    messagingSenderId: "273252324191",
+    appId: "1:273252324191:web:85a5fc796716943cd2dcea"
+};
 
-  font-weight: normal;
-}
 
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+export default {
+  data() {
+    return {}
+  },
+  methods: {
+    },
+  mounted() {
+    firebase.initializeApp(firebaseConfig);
+    const firestore = firebase.firestore();
+    this.$store.commit("setDb", firestore)
+    // Update navbar to show which is selected
+    if (this.$store.state.currentPage != "home" && this.$store.state.currentPage != "") {
+      document.getElementById(this.$store.state.currentPage).className += " active"
+    }
   }
 }
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
-
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
-</style> -->
+</script>

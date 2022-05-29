@@ -1,31 +1,27 @@
-// import { createApp } from 'vue'
-import { createApp } from 'vue'
+import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import BootstrapVue3 from 'bootstrap-vue-3'
-// import firebase from "firebase";
+import store from './store'
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 
-// Optional, since every component import their Bootstrap functionality
-// the following line is not necessary
-// import 'bootstrap'
-
+// Import Bootstrap and BootstrapVue CSS files (order is important)
 import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-const firebaseConfig = {
-    apiKey: "AIzaSyBxGWhCtNC0X8Kwpgj685NuUkSYUjk1yjU",
-    authDomain: "abb-programmeraren.firebaseapp.com",
-    databaseURL: "https://abb-programmeraren-default-rtdb.firebaseio.com",
-    projectId: "abb-programmeraren",
-    storageBucket: "abb-programmeraren.appspot.com",
-    messagingSenderId: "273252324191",
-    appId: "1:273252324191:web:85a5fc796716943cd2dcea"
-};
+import { firestorePlugin } from 'vuefire'
 
-firebase.initializeApp(firebaseConfig);
+Vue.use(firestorePlugin)
 
-const app = createApp(App)
-app.use(BootstrapVue3)
-app.use(router)
+// Make BootstrapVue available throughout your project
+Vue.use(BootstrapVue)
+// Optionally install the BootstrapVue icon components plugin
+Vue.use(IconsPlugin)
 
-app.mount('#app')
+
+Vue.config.productionTip = false
+
+new Vue({
+  router,
+  store,
+  render: h => h(App)
+}).$mount('#app')
