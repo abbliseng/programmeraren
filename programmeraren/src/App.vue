@@ -10,9 +10,9 @@
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
           <a id="projects" class="nav-item nav-link" href="/projects">Projekt</a>
-          <a id="course_material" class="nav-item nav-link" href="/course_material">Läromedel</a>
+          <a id="course_material" class="nav-item nav-link disabled" href="/course_material">Läromedel</a>
           <a id="tasks" class="nav-item nav-link disabled" href="/tasks">Uppgifter</a>
-          <a id="account" class="nav-item nav-link disabled" href="/account">Konto</a>
+          <a id="account" class="nav-item nav-link" href="/account">Konto</a>
           <!-- <b-tabs content-class="mt-3">
             <b-tab title="First" active>
               <p>I'm the first tab</p>
@@ -32,19 +32,19 @@
 </template>
 
 <script>
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';// import * as firebase from 'firebase';
+// import firebase from 'firebase/compat/app';
+// import 'firebase/compat/auth';
+// import 'firebase/compat/firestore';// import * as firebase from 'firebase';
 
-const firebaseConfig = {
-    apiKey: "AIzaSyBxGWhCtNC0X8Kwpgj685NuUkSYUjk1yjU",
-    authDomain: "abb-programmeraren.firebaseapp.com",
-    databaseURL: "https://abb-programmeraren-default-rtdb.firebaseio.com",
-    projectId: "abb-programmeraren",
-    storageBucket: "abb-programmeraren.appspot.com",
-    messagingSenderId: "273252324191",
-    appId: "1:273252324191:web:85a5fc796716943cd2dcea"
-};
+// const firebaseConfig = {
+//     apiKey: "AIzaSyBxGWhCtNC0X8Kwpgj685NuUkSYUjk1yjU",
+//     authDomain: "abb-programmeraren.firebaseapp.com",
+//     databaseURL: "https://abb-programmeraren-default-rtdb.firebaseio.com",
+//     projectId: "abb-programmeraren",
+//     storageBucket: "abb-programmeraren.appspot.com",
+//     messagingSenderId: "273252324191",
+//     appId: "1:273252324191:web:85a5fc796716943cd2dcea"
+// };
 
 
 
@@ -55,9 +55,15 @@ export default {
   methods: {
     },
   mounted() {
-    firebase.initializeApp(firebaseConfig);
-    const firestore = firebase.firestore();
-    this.$store.commit("setDb", firestore)
+    console.log("Current user:",this.$firebase.auth().currentUser)
+    this.$store.commit("setCurrentUser", this.$firebase.auth().currentUser)
+    console.log(this.$store.getters.getCurrentUser)
+    // console.log(this.$firebase.auth().currentUser)
+    // console.log(this.$firebase.firestore().collection("chapters"))
+    // firebase.initializeApp(firebaseConfig);
+    // this.$store.commit("setFirebase", firebase)
+    // const firestore = firebase.firestore();
+    // this.$store.commit("setDb", firestore)
     // Update navbar to show which is selected
     if (this.$store.state.currentPage != "home" && this.$store.state.currentPage != "") {
       document.getElementById(this.$store.state.currentPage).className += " active"

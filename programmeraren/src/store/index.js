@@ -6,16 +6,19 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     currentPage: 'home',
-    db: ''
+    currentUser: undefined
   },
   getters: {
+    getCurrentUser(state) {
+      return state.currentUser
+    }
   },
   mutations: {
     setCurrentPage(state, p) {
-      this.state.currentPage = p
+      state.currentPage = p
     },
-    setDb(state, p) {
-      this.state.db = p
+    setCurrentUser(state, p) {
+      state.currentUser = p
     }
   },
   actions: {

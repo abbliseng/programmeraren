@@ -32,7 +32,15 @@ const routes = [
   {
     path: '/account',
     name: 'account',
-    component: () => import('../views/AccountView.vue')
+    component: () => import('../views/AccountView.vue'),
+    meta: {
+      authRequired: true,
+    }
+  },
+  {
+    path: '/signin',
+    name: 'signin',
+    component: () => import('../views/SignInView.vue')
   }
 ]
 
@@ -43,10 +51,25 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  // Handle auth
+  console.log("Router:",store.getters.getCurrentUser)
+  if (to.matched.some(record => record.meta.authRequired)) {
+    if (store.state.currentUser) {
+      next()
+    } else {
+      next({
+        name: "signin"
+      });
+    }
+  } else {
+    next()
+  }
   store.commit("setCurrentPage", to.name)
   // Redirects from the homepage
   if (to.name == "home") next({name: 'projects'})
   else next()
+
+
 })
 
 export default router
