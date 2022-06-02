@@ -56,16 +56,9 @@ export default {
     },
   mounted() {
     console.log("Current user:",this.$firebase.auth().currentUser)
-    this.$store.commit("setCurrentUser", this.$firebase.auth().currentUser)
-    console.log(this.$store.getters.getCurrentUser)
-    // console.log(this.$firebase.auth().currentUser)
-    // console.log(this.$firebase.firestore().collection("chapters"))
-    // firebase.initializeApp(firebaseConfig);
-    // this.$store.commit("setFirebase", firebase)
-    // const firestore = firebase.firestore();
-    // this.$store.commit("setDb", firestore)
-    // Update navbar to show which is selected
-    if (this.$store.state.currentPage != "home" && this.$store.state.currentPage != "") {
+    // this.$store.commit("setCurrentUser", this.$firebase.auth().currentUser)
+    // console.log(this.$store.getters.getCurrentUser)
+    if (this.$store.state.currentPage != "home" && this.$store.state.currentPage != "" && this.$store.state.currentPage != "signin") {
       document.getElementById(this.$store.state.currentPage).className += " active"
     }
   }

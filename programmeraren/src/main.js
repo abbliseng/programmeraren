@@ -20,7 +20,9 @@ const firebaseConfig = {
     appId: "1:273252324191:web:85a5fc796716943cd2dcea"
 };
 // eslint-disable-next-line
-Vue.prototype.$firebase = firebase.initializeApp(firebaseConfig)
+var fb = firebase.initializeApp(firebaseConfig)
+Vue.prototype.$firebase = fb
+Vue.prototype.$db = fb.firestore()
 
 // firebase.initializeApp(firebaseConfig);
 // this.$store.commit("setFirebase", firebase)
