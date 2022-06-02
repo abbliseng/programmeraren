@@ -1,6 +1,5 @@
 <template>
   <div class="row justify-content-center">
-    <b-alert :variant="a.type" :show="a.show">{{ a.message }}</b-alert>
     <b-card
       class="col-4 bg-dark text-light"
       style="margin-top: 10px"
@@ -53,6 +52,7 @@
           @click="
             registerUser = true;
             addClasses();
+            resetForm();
           "
           >Har du inget konto?</b-button
         >
@@ -143,7 +143,7 @@
           class="col-12 bg-light text-black"
           size="sm"
           style="max-width: 94%; margin-top: 10px"
-          @click="registerUser = false"
+          @click="registerUser = false; resetForm()"
           >Har du redan ett konto?</b-button
         >
       </b-form>
@@ -165,71 +165,34 @@ export default {
         class: null,
       },
       options: [{ value: null, text: "Ange klass" }],
-      a: {
-        show: false,
-        type: "success",
-        message: "wow u did it!"
-      }
+      
     };
   },
   methods: {
     register() {
-      this.$firebase
-        .auth()
-        .createUserWithEmailAndPassword(this.form.email, this.form.password)
-        .then((user) => {
-          this.$db.collection("users")
-            .doc(user.user.uid)
-            .set({
-              firstname: this.form.firstname,
-              lastname: this.form.lastname,
-              email: this.form.email,
-              class: this.form.class
-            })
-          this.a = {
-            type: "success",
-            show: true,
-            message: "Användare har registrerats, vänligen logga in."
-          }
-          this.registerUser = false;
-        })
-        .catch((error) => {
-          this.a = {
-            type: "danger",
-            show: true,
-            message: error.message
-          }
-        });
+      this.$store.dispatch("signup", {
+        email: this.form.email,
+        password: this.form.password,
+        firstname: this.form.firstname,
+        lastname: this.form.lastname,
+        class: this.form.class
+      });
+      this.resetForm();
+      this.registerUser = false;
     },
     login(email, password) {
-      this.$firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password)
-        .then(() => {
-          this.a = {
-            type: "success",
-            show: true,
-            message: "Välkommen!"
-          }
-          this.$store.commit(
-            "setCurrentUser",
-            this.$firebase.auth().currentUser
-          );
-          // this.$router.push("/");
-        })
-        .catch((error) => {
-          this.a = {
-            type: "danger",
-            show: true,
-            message: error.message
-          }
-        });
+      this.$store.dispatch("login", {
+        email: email,
+        password: password
+      });
+      this.resetForm()
     },
     resetForm() {
       this.form.email = "";
       this.form.password = "";
       this.form.firstname = "";
       this.form.lastname = "";
+      this.form.class = null;
     },
     onSubmit(event) {
       event.preventDefault();

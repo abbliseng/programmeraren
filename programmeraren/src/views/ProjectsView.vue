@@ -75,7 +75,7 @@ export default {
         .get()
         .then((snapshots) => {
           snapshots.forEach((doc) => {
-            console.log(doc)
+            console.log(doc.data())
             // console.log("Creating card...")
             // let card = document.createElement("b-card")
             // console.log(card)

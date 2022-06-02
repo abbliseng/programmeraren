@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import store from '../store/index.js'
+import firebase from "firebase/compat/app";
 
 Vue.use(VueRouter)
 
@@ -52,21 +53,27 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   // Handle auth
-  if (to.matched.some(record => record.meta.authRequired)) {
-    if (store.state.currentUser) {
-      next()
-    } else {
-      next({
-        name: "signin"
-      });
-    }
+  const requiresAuth = to.matched.some(x => x.meta.authRequired);
+  // console.log(requiresAuth,firebase.auth().currentUser)
+  if (requiresAuth && !firebase.auth().currentUser){
+    next({name: "signin"})
   } else {
-    next()
+    if (to.name == "home") next({name: 'projects'})
+    else next()
   }
   store.commit("setCurrentPage", to.name)
+  // if (to.matched.some(record => record.meta.authRequired)) {
+  //   if (store.state.currentUser) {
+  //     next()
+  //   } else {
+  //     next({
+  //       name: "signin"
+  //     });
+  //   }
+  // } else {
+  //   next()
+  // }
   // Redirects from the homepage
-  if (to.name == "home") next({name: 'projects'})
-  else next()
 
 
 })
