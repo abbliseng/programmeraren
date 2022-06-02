@@ -1,7 +1,7 @@
 <template>
   <div id="head" class="row no-gutters justify-content-center">
     <b-button class="col-5" style="margin-top:15px" @click="loadChapters()">Load chapters</b-button>
-    <!-- <b-card class="col-8 row justify-content-center" title="Test projekt" style="margin-top: 15px">
+    <b-card class="col-8 row justify-content-center" title="Test projekt" style="margin-top: 15px">
       <b-card-text class="col-8">
         Vestibulum urna turpis, elementum quis euismod at, hendrerit in erat.
         Sed pretium hendrerit lacus. Donec id eros leo. Maecenas ultricies at
@@ -59,7 +59,7 @@
         pretium arcu eu hendrerit. Sed vulputate sodales eleifend. Proin non
         neque ut sem maximus elementum ut non leo.
       </b-card-text>
-    </b-card> -->
+    </b-card>
   </div>
 </template>
 
@@ -70,21 +70,37 @@ export default {
   },
   methods: {
     loadChapters() {
-      // let parent = document.getElementById("head")
+      let parent = document.getElementById("head")
       this.$db.collection("projects")
         .get()
         .then((snapshots) => {
           snapshots.forEach((doc) => {
             console.log(doc.data())
             // console.log("Creating card...")
-            // let card = document.createElement("b-card")
+            let card = document.createElement("div")
             // console.log(card)
             // // card.title = doc.id
-            // card.setAttribute("class", "col-8 row justify-content-center")
+            card.setAttribute("class", "card col-8 row justify-content-center")
             // card.setAttribute("title", doc.id)
-            // card.setAttribute("style", "margin-top: 15px")
-            // parent.appendChild(card)
-            // console.log(parent)
+            card.setAttribute("style", "margin-top: 15px")
+
+            let card_body = document.createElement("div")
+            card_body.setAttribute("class", "card-body")
+
+            let title = document.createElement("h4")
+            title.setAttribute("class", "card-title")
+            title.innerHTML = doc.id
+            card_body.appendChild(title)
+
+            let text = document.createElement("b-card-text")
+            text.setAttribute("class", "col-8")
+            text.innerHTML = "Vestibulum urna turpis, elementum quis euismod at, hendrerit in erat. Sed pretium hendrerit lacus. Donec id eros leo. Maecenas ultricies at nulla et iaculis. Vestibulum pulvinar quis tortor ut malesuada. Proin aliquet luctus eleifend. Praesent eget pellentesque odio. Pellentesque finibus eros id quam cursus ultrices nec ut magna. Cras dolor enim, aliquam a justo sed, molestie tempor ligula. Cras ut mauris vitae enim varius lobortis. Suspendisse ornare facilisis augue, a feugiat nunc auctor vitae. Nulla vitae dolor sit amet nibh aliquam tincidunt. Aliquam quam sem, lobortis non bibendum in, tempor non risus."
+            card_body.appendChild(text)
+
+            card.appendChild(card_body)
+
+            parent.appendChild(card)
+            console.log(parent)
           })
         })
       // let child = document.createElement("span")
