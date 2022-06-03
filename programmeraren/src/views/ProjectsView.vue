@@ -1,19 +1,22 @@
 <template>
   <div>
-    <!-- <b-button id="debugButton" class="col-5" style="margin-top:15px" @click="loadChapters()">Load chapters</b-button> -->
+    <!-- <b-button id="debugButton" class="col-5" style="margin-top:15px" @click="testSortChapters()">Load chapters
+    </b-button> -->
     <div id="head" class="row no-gutters justify-content-center">
     </div>
   </div>
 </template>
 
 <script>
+// import { query, orderBy, getDocs } from 'firebase/firestore'
+
 export default {
   data() {
     return {};
   },
-  mounted () {
+  mounted() {
     this.loadChapters();
-  },  
+  },
   methods: {
     loadChapters() {
       let parent = document.getElementById("head")
@@ -32,6 +35,7 @@ export default {
             let card = document.createElement("div")
             card.setAttribute("class", "card col-8 row justify-content-center")
             card.setAttribute("style", "margin-top: 15px")
+            card.setAttribute("id", data_point.id)
 
             let card_body = document.createElement("div")
             card_body.setAttribute("class", "card-body")
@@ -42,8 +46,8 @@ export default {
             card_body.appendChild(title)
 
             const data_keys = Object.keys(data_point)
-            data_keys.forEach((key) => {
-              // console.log(key,":",index,":",data_point[key]);
+            for (let i = 1; i < data_keys.length; i++) {
+              let key = "n"+i.toString()
               if (data_point[key].type == "text") {
                 let subtitle = document.createElement("h6")
                 subtitle.setAttribute("class", "card-subtitle")
@@ -55,8 +59,7 @@ export default {
               } else if (data_point[key].type == "img") {
                 card_body.appendChild(this.createImageElement(data_point[key].class, data_point[key].content))
               }
-            });
-
+            }
             card.appendChild(card_body)
             parent.appendChild(card)
           })
