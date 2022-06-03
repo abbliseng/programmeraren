@@ -1,8 +1,11 @@
 <template>
-  <div>
+  <div class="row no-gutters justify-content-center">
     <!-- <b-button id="debugButton" class="col-5" style="margin-top:15px" @click="testSortChapters()">Load chapters
     </b-button> -->
-    <div id="head" class="row no-gutters justify-content-center">
+    <div class="col-12 row no-gutters justify-content-center">
+      <b-button class="col-8" style="margin-top:10px">SKAPA NYTT PROJEKT</b-button>
+    </div>
+    <div id="head" class="col-12 row no-gutters justify-content-center">
     </div>
   </div>
 </template>
