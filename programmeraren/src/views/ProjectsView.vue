@@ -3,7 +3,7 @@
     <!-- <b-button id="debugButton" class="col-5" style="margin-top:15px" @click="testSortChapters()">Load chapters
     </b-button> -->
     <div class="col-12 row no-gutters justify-content-center">
-      <b-button class="col-8" style="margin-top:10px">SKAPA NYTT PROJEKT</b-button>
+      <b-button v-if="admin" class="col-8" style="margin-top:10px" href="/create_new_projects">SKAPA NYTT PROJEKT</b-button>
     </div>
     <div id="head" class="col-12 row no-gutters justify-content-center">
     </div>
@@ -11,17 +11,21 @@
 </template>
 
 <script>
-// import { query, orderBy, getDocs } from 'firebase/firestore'
-
 export default {
   data() {
-    return {};
+    return {
+      admin: false
+    };
   },
   mounted() {
-    this.loadChapters();
+    this.loadProjects();
+    this.isAdmin();
   },
   methods: {
-    loadChapters() {
+    async isAdmin() {
+      this.admin = await this.$store.getters.getAdminStatus
+    },
+    loadProjects() {
       let parent = document.getElementById("head")
       this.$db.collection("projects")
         .get()
@@ -50,7 +54,7 @@ export default {
 
             const data_keys = Object.keys(data_point)
             for (let i = 1; i < data_keys.length; i++) {
-              let key = "n"+i.toString()
+              let key = "n" + i.toString()
               if (data_point[key].type == "text") {
                 let subtitle = document.createElement("h6")
                 subtitle.setAttribute("class", "card-subtitle")

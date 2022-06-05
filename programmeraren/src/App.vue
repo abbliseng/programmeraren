@@ -51,7 +51,7 @@ export default {
     // console.log("Current user:",this.$firebase.auth().currentUser)
     // this.$store.commit("setCurrentUser", this.$firebase.auth().currentUser)
     // console.log(this.$store.getters.getCurrentUser)
-    if (this.$store.state.currentPage != "home" && this.$store.state.currentPage != "" && this.$store.state.currentPage != "signin" && this.$store.state.currentPage != "account") {
+    if (this.$store.state.currentPage != "home" && this.$store.state.currentPage != "" && this.$store.state.currentPage != "signin" && this.$store.state.currentPage != "account" && this.$store.state.currentPage != "create_new_projects") {
       document.getElementById(this.$store.state.currentPage).className += " active"
     }
   }

@@ -20,6 +20,9 @@ export default new Vuex.Store({
   getters: {
     async getSignInStatus() {
       return await ((firebase.auth().currentUser) ? true : false)
+    },
+    async getAdminStatus() {
+      return "admin" in (await firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid).get()).data() ? (await firebase.firestore().collection("users").doc(firebase.auth().currentUser.uid).get()).data().admin : false
     }
   },
   mutations: {
